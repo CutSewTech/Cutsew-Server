@@ -48,7 +48,7 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
       res.send(result)
     })
     //get all user information by registration
-    app.get("/?us#er?s",async(req,res)=>{
+    app.get("/%us9er9s9",async(req,res)=>{
       const user = await userCollection.find().toArray();
       res.send(user)
     })
