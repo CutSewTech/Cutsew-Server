@@ -42,13 +42,13 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
 })
     
     //send all user information by registration
-    app.post('/users',async(req,res)=>{
+    app.post('/user',async(req,res)=>{
       const user = req.body
       const result = await userCollection.insertOne(user)
       res.send(result)
     })
     //get all user information by registration
-    app.get("/user",async(req,res)=>{
+    app.get("/?us#er?s",async(req,res)=>{
       const user = await userCollection.find().toArray();
       res.send(user)
     })
