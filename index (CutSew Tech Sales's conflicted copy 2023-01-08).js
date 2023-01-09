@@ -11,8 +11,6 @@ app.use(cors());
 
 // ----------===========------
 
-
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dzdxbuj.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -21,7 +19,6 @@ async function run() {
   try {
     await client.connect();
     const userCollection = client.db("users").collection("user");
-    const userCollections = client.db("usersPhone").collection("userPhone");
 
 // /******verifyAddmin ********/
 
@@ -44,27 +41,15 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
     
     //send all user information by registration
     app.post('/user',async(req,res)=>{
-      const user = req.body;
-
+      const user = req.body
       const result = await userCollection.insertOne(user)
       res.send(result)
-   
     })
     //get all user information by registration
     app.get("/user",async(req,res)=>{
       const user = await userCollection.find().toArray();
       res.send(user)
-      
     })
-//send UsersPhone Info backend
-// app.post('/userPhone',async(req,res)=>{
-//   const userPhone = req.body;
-//     const result = await userCollections.insertOne(userPhone)
-//      res.send(result)
-//      console.log(result)
-
-// })
-
 
     /******delete user by email********/
     // app.delete('/removeuser/:Id',async(req,res)=>{
@@ -104,6 +89,8 @@ app.put('/removeAdmin',verifyAddmin,async(req,res)=>{
   }
 }
 run().catch(console.dir);
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
