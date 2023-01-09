@@ -45,8 +45,9 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
     //send all user information by registration
     app.post('/users',async(req,res)=>{
       const user = req.body;
-      const exist = await userCollection.findOne({email:email,number:number})
-      if(!exist){
+      const exist = await userCollection.findOne({email:user.email})
+      const exist1 = await userCollection.findOne({Number:user.number})
+      if(!exist || !exist1){
         const result = await userCollection.insertOne(user)
         res.send(result)
       }
