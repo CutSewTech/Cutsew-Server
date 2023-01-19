@@ -6,7 +6,7 @@ const cors = require('cors');
 const port = process.env.PORT || 5000
 
 //use middleware
-app.use(cors());
+app.use(cors({origin: true, credentials: true}));
 
 // ----------===========------
 
