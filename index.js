@@ -6,7 +6,8 @@ const cors = require('cors');
 const port = process.env.PORT || 5000
 
 //use middleware
-app.use(cors({origin: true, credentials: true}));
+app.use(cors());
+ app.use(express.json())
 
 // ----------===========------
 
@@ -20,7 +21,7 @@ async function run() {
   try {
     await client.connect();
     const userCollection = client.db("users").collection("user");
-    const userCollections = client.db("usersPhone").collection("userPhone");
+
 
 // /******verifyAddmin ********/
 
@@ -42,15 +43,15 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
 })
     
     //send all user information by registration
-    app.post('/users',async(req,res)=>{
+    app.post('/userss',async(req,res)=>{
       const user = req.body;
       const exist = await userCollection.findOne({email:user.email})
-      const exist1 = await userCollection.findOne({Number:user.number})
-      if(!exist || !exist1){
-        const result = await userCollection.insertOne(user)
-        res.send(result)
-      }
-   
+      const exist1 = await userCollection.findOne({Number:user.Number})
+     if(!exist || !exist1){
+      const result = await userCollection.insertOne(user)
+      res.send(result)
+     }
+  
     })
     //get all user information by registration
     app.get("/user",async(req,res)=>{
@@ -66,6 +67,11 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
 //      console.log(result)
 
 // })
+
+
+
+
+
 
 
     /******delete user by email********/
