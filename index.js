@@ -21,6 +21,7 @@ async function run() {
   try {
     await client.connect();
     const userCollection = client.db("users").collection("user");
+    const productsCOllection = client.db("products").collection("product");
 
 
 // /******verifyAddmin ********/
@@ -67,13 +68,6 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
 //      console.log(result)
 
 // })
-
-
-
-
-
-
-
     /******delete user by email********/
     // app.delete('/removeuser/:Id',async(req,res)=>{
     //   const Id = req.params.Id;
@@ -104,6 +98,14 @@ app.put('/removeAdmin',verifyAddmin,async(req,res)=>{
     const result = await userCollection.updateOne(filter, updateDoc);
     res.send(result);
  
+})
+
+// -----------getproduct backend info----------
+app.post('/addsProducts',async(req,res)=>{
+  const products=req.body;
+  const result = await productsCOllection.insertOne(products);
+  res.send(result)
+  console.log(result)
 })
 
   }
