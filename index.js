@@ -68,7 +68,7 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
 //      console.log(result)
 
 // })
-    /******delete user by email********/
+    /******delete user by Id********/
     // app.delete('/removeuser/:Id',async(req,res)=>{
     //   const Id = req.params.Id;
     //   const query = {_id:ObjectId(Id)}
@@ -113,6 +113,14 @@ app.get('/addsProduct',async(req,res)=>{
   const products = await productsCOllection.find().toArray()
   res.send(products)
 })
+// ----*******get one products-----*********
+app.get("productone/:Id",async(req,res)=>{
+  const Id = req.params.Id
+  const query ={_id:ObjectId(Id)}
+  const getProduct = await productsCOllection.findOne(query)
+  res.send(getProduct)
+})
+
 
   }
   finally {
