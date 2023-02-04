@@ -108,6 +108,12 @@ app.post('/addsProducts',async(req,res)=>{
   console.log(result)
 })
 
+// ----**********get all product***********-----
+app.get('/addsProduct',async(req,res)=>{
+  const products = await productsCOllection.find().toArray()
+  res.send(products)
+})
+
   }
   finally {
   
