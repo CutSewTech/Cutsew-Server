@@ -113,10 +113,10 @@ app.get('/addsProduct',async(req,res)=>{
   const products = await productsCOllection.find().toArray()
   res.send(products)
 })
-// ----*******get one products-----*********
-app.get("productone/:Id",async(req,res)=>{
-  const Id = req.params.Id
-  const query ={_id:ObjectId(Id)}
+// ----*******get products Details-----*********
+app.get('/productDetails/:id',async(req,res)=>{
+  const id = req.params.id
+  const query ={_id:ObjectId(id)}
   const getProduct = await productsCOllection.findOne(query)
   res.send(getProduct)
 })
