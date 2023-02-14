@@ -77,12 +77,23 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
 
     // })
 //Make Admin----------------
- //ADMIN ROLL
+ //Main ADMIN ROLL
 app.put('/verifyUsers',verifyAddmin,async(req,res)=>{
   const email = req.body.email;
     const filter = {email:email};
     const updateDoc = {
       $set:{role:"admin"},
+    };
+    const result = await userCollection.updateOne(filter, updateDoc);
+    res.send(result);
+ 
+})
+ //Service ADMIN ROLL
+app.put('/verifyService',verifyAddmin,async(req,res)=>{
+  const email = req.body.email;
+    const filter = {email:email};
+    const updateDoc = {
+      $set:{role:"serviceAdmin"},
     };
     const result = await userCollection.updateOne(filter, updateDoc);
     res.send(result);
@@ -115,13 +126,11 @@ app.get('/addsProduct',async(req,res)=>{
 })
 // ----*******get products Details-----*********
 app.get('/productDetails/:id',async(req,res)=>{
-  const id = req.params.id
+  const id = req.params.id;
   const query ={_id:ObjectId(id)}
   const getProduct = await productsCOllection.findOne(query)
   res.send(getProduct)
 })
-
-
   }
   finally {
   
