@@ -42,6 +42,24 @@ app.get('/admin',verifyAddmin,async(req,res)=>{
   const isAdmin=user.role==='admin';
   res.send({admin:isAdmin})
 })
+// /******----------verifyUserAddmin------------------ ********/
+
+const verifyUserAddmin=async(req,res,next)=>{
+  const requerster =req.query.email;
+  const requersterAccount = await userCollection.findOne({email:requerster});
+  if(requersterAccount?.role==="serviceAdmin"){
+    next()
+  }else{
+    
+  }
+}
+
+app.get('/serviceAdmin',verifyUserAddmin,async(req,res)=>{
+  const email=req.query.email;
+  const user = await userCollection.findOne({email:email});
+  const isAdmin=user.role==='serviceAdmin';
+  res.send({admin:isAdmin})
+})
     
     //send all user information by registration
     app.post('/userss',async(req,res)=>{
