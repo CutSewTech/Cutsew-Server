@@ -58,7 +58,7 @@ app.get('/serviceAdmin',verifyUserAddmin,async(req,res)=>{
   const email=req.query.email;
   const user = await userCollection.findOne({email:email});
   const isAdmin=user.role==='serviceAdmin';
-  res.send({admin:isAdmin})
+  res.send({serviceAdmin:isAdmin})
 })
     
     //send all user information by registration
