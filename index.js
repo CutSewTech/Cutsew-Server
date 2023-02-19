@@ -22,8 +22,9 @@ async function run() {
     await client.connect();
     const userCollection = client.db("users").collection("user");
     const productsCOllection = client.db("products").collection("product");
+    const serviceAdmins = client.db("ServiceProblems").collection("ServiceProblem")
 
-
+// ---------------------*********Main Admin**********-----------------------
 // /******verifyAddmin ********/
 
 const verifyAddmin=async(req,res,next)=>{
@@ -35,14 +36,38 @@ const verifyAddmin=async(req,res,next)=>{
     
   }
 }
-
 app.get('/admin',verifyAddmin,async(req,res)=>{
   const email=req.query.email;
   const user = await userCollection.findOne({email:email});
   const isAdmin=user.role==='admin';
   res.send({admin:isAdmin})
 })
-// /******----------verifyUserAddmin------------------ ********/
+//Make Admin----------------
+ //Main ADMIN ROLL
+ app.put('/verifyUsers',verifyAddmin,async(req,res)=>{
+  const email = req.body.email;
+    const filter = {email:email};
+    const updateDoc = {
+      $set:{role:"admin"},
+    };
+    const result = await userCollection.updateOne(filter, updateDoc);
+    res.send(result);
+ 
+})
+// ----------------*************For ServiceAdmin***************--------------
+ //Service ADMIN ROLL
+ app.put('/verifyService',verifyAddmin,async(req,res)=>{
+  const email = req.body.email;
+    const filter = {email:email};
+    const updateDoc = {
+      $set:{role:"serviceAdmin"},
+    };
+    const result = await userCollection.updateOne(filter, updateDoc);
+    res.send(result);
+ 
+})
+//Make Admin----------------
+// /******-------verifyUserAddmin-------- ********/
 
 const verifyUserAddmin=async(req,res,next)=>{
   const requerster =req.query.email;
@@ -60,7 +85,20 @@ app.get('/serviceAdmin',verifyUserAddmin,async(req,res)=>{
   const isAdmin=user.role==='serviceAdmin';
   res.send({serviceAdmin:isAdmin})
 })
-    
+
+//Remove Admin----------------
+app.put('/removeAdmin',verifyAddmin,async(req,res)=>{
+  const email = req.body.email;
+    const filter = {email:email};
+    const updateDoc = {
+      $set:{role:""},
+    };
+    const result = await userCollection.updateOne(filter, updateDoc);
+    res.send(result);
+ 
+})
+
+//  ------------------*************For User Info*************-----------------------   
     //send all user information by registration
     app.post('/userss',async(req,res)=>{
       const user = req.body;
@@ -94,41 +132,7 @@ app.get('/serviceAdmin',verifyUserAddmin,async(req,res)=>{
     //   res.send(result)
 
     // })
-//Make Admin----------------
- //Main ADMIN ROLL
-app.put('/verifyUsers',verifyAddmin,async(req,res)=>{
-  const email = req.body.email;
-    const filter = {email:email};
-    const updateDoc = {
-      $set:{role:"admin"},
-    };
-    const result = await userCollection.updateOne(filter, updateDoc);
-    res.send(result);
- 
-})
- //Service ADMIN ROLL
-app.put('/verifyService',verifyAddmin,async(req,res)=>{
-  const email = req.body.email;
-    const filter = {email:email};
-    const updateDoc = {
-      $set:{role:"serviceAdmin"},
-    };
-    const result = await userCollection.updateOne(filter, updateDoc);
-    res.send(result);
- 
-})
-//Remove Admin----------------
-app.put('/removeAdmin',verifyAddmin,async(req,res)=>{
-  const email = req.body.email;
-    const filter = {email:email};
-    const updateDoc = {
-      $set:{role:""},
-    };
-    const result = await userCollection.updateOne(filter, updateDoc);
-    res.send(result);
- 
-})
-
+// --------------------------------------************ For Product***********------------------------
 // -----------getproduct backend info----------
 app.post('/addsProducts',async(req,res)=>{
   const products=req.body;
@@ -149,6 +153,46 @@ app.get('/productDetails/:id',async(req,res)=>{
   const getProduct = await productsCOllection.findOne(query)
   res.send(getProduct)
 })
+
+// -------------------******************serviceAdmin Problems***************----------------------
+//send problems of backend
+app.post('/addProblems',async(req,res)=>{
+  const problems= req.body;
+  const result = await serviceAdmins.insertOne(problems);
+  res.send(result)
+  console.log(result)
+})
+
+//get one members problems by email
+app.get('/getOneProblems',async(req,res)=>{
+ const email = req.query.email;
+ const query={email:email}
+ const result = await serviceAdmins.find(query).toArray();
+ res.send(result)
+})
+
+//updtae Status by id
+app.get('/updateStatus/:id',async(req,res)=>{
+  const id = req.params.id
+  const query={_id:ObjectId(id)}
+  const problems = await serviceAdmins.findOne(query)
+  res.send(problems)
+})
+
+app.put('/updateStatus/:id',async(req,res)=>{
+  const id = req.params.id;
+  const updateStatus= req.body.updateStatus;
+  const updateDescription= req.body.updateDescription;
+  const filter = {_id:ObjectId(id)};
+   const options = { upsert: true };
+   const updateDoc = {
+     $set: {problemDescription:updateDescription,problemsStatus:updateStatus}
+  };
+
+  const result = await serviceAdmins.updateOne(filter, updateDoc, options);
+  res.send(result)
+})
+// --------------------------------------------------------------------
   }
   finally {
   
