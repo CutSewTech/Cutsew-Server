@@ -163,6 +163,11 @@ app.post('/addProblems',async(req,res)=>{
   console.log(result)
 })
 
+//get All members problems by email
+app.get('/getProblems',async(req,res)=>{
+ const result = await serviceAdmins.find().toArray();
+ res.send(result)
+})
 //get one members problems by email
 app.get('/getOneProblems',async(req,res)=>{
  const email = req.query.email;
