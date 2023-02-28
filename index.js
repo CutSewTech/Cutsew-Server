@@ -188,10 +188,11 @@ app.put('/updateStatus/:id',async(req,res)=>{
   const id = req.params.id;
   const updateStatus= req.body.updateStatus;
   const updateDescription= req.body.updateDescription;
+  const imageUrls= req.body.imageUrls;
   const filter = {_id:ObjectId(id)};
    const options = { upsert: true };
    const updateDoc = {
-     $set: {problemDescription:updateDescription,problemsStatus:updateStatus}
+     $set: {problemDescription:updateDescription,problemsStatus:updateStatus,picture:imageUrls}
   };
 
   const result = await serviceAdmins.updateOne(filter, updateDoc, options);
